@@ -1,3 +1,4 @@
+import base64
 from requests import Response
 from .models import Documento
 from rest_framework import viewsets
@@ -8,7 +9,8 @@ from rest_framework_simplejwt.authentication import JWTAuthentication
 from rest_framework.exceptions import AuthenticationFailed
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.decorators import action
-from django.http import FileResponse
+from django.http import FileResponse, HttpResponse
+import PyPDF2
 
 
 def get_user_from_token(request):
@@ -50,13 +52,15 @@ class GeneratePdfViewSet(viewsets.ViewSet):
     def generatePdf(self, request, pk=None):
         try:
             document = get_object_or_404(Documento, id=pk)
-            print(f'document : {document} documento id: {document.id}')
+          
             pdf = generate_pdf(document.id)
-            print(f'olha o pdf: {pdf}')
-            # Retorne o PDF como uma resposta HTTP
-            response = FileResponse(pdf, content_type='application/pdf')
-            response['Content-Disposition'] = f'inline; filename="{document.nome}.pdf"'
+
+            output_pdf_file = "output.pdf"
+
+           
+                
+            response = HttpResponse(pdf, content_type="application/pdf")
+            response["Content-Disposition"] = "attachment; filename=output.pdf"
             return response
         except Documento.DoesNotExist:
-            # Se o documento não for encontrado, retorne uma resposta adequada (por exemplo, 404 Not Found)
             return Response({'detail': 'Documento não encontrado'}, status=404)
