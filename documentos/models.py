@@ -11,4 +11,4 @@ class Documento(models.Model):
     assinado = models.BooleanField(default=False)
 
     def __str__(self):
-        return self.titulo 
+        return self.nome 

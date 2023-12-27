@@ -1,7 +1,8 @@
 import pdfkit
 from documentos.models import Documento
 
-def main(document_id):
+def generate_pdf(document_id):
     document = Documento.objects.get(id=document_id)
-    pdf = pdfkit.from_string(document.corpo)
+    print(f'Dentro do bgl document : {document} documento id: {document.id}, corpo: {document.corpo}')
+    pdf = pdfkit.from_string(document.corpo, False)
     return pdf

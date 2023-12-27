@@ -8,7 +8,7 @@ cert_path = os.path.join(BASE_DIR, 'assets', 'secrets','certificate.pem')
 key_path = os.path.join(BASE_DIR, 'assets', 'secrets','private_key.pem')
 certificates = os.path.join(BASE_DIR, 'assets', 'certificates')
 
-def main(document_id):
+def sign_document(document_id):
     document = Documento.objects.get(id=document_id)
     sign_pdf(
         document, cert_path, key_path,
