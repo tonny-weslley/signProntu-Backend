@@ -4,8 +4,8 @@ from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 from rest_framework import generics, permissions
 from rest_framework.response import Response
-from django.contrib.auth.models import User
-from .serializers import UserSerializer
+from .models import CustomUser
+from .serializers import CustomUserSerializer
 
 
 # class CustomTokenObtainPairView(TokenObtainPairView):
@@ -31,20 +31,20 @@ class CustomTokenRefreshView(TokenRefreshView):
         response = super().post(request, *args, **kwargs)
         refresh = response.data.get('refresh')
         access = response.data.get('access')
-        user_id = self.user.id  # Adapte isso de acordo com seu modelo de usuário
+        user_id = self.CustomUser.id  # Adapte isso de acordo com seu modelo de usuário
 
         if refresh and access:
             refresh_token = RefreshToken(refresh)
             refresh_token.blacklist()
-            refresh_token = RefreshToken.for_user(self.user)
+            refresh_token = RefreshToken.for_user(self.CustomUser)
             response.data['refresh'] = str(refresh_token)
             response.data['user_id'] = user_id
 
         return response
     
 class RegisterUserView(generics.CreateAPIView):
-    queryset = User.objects.all()
-    serializer_class = UserSerializer
+    queryset = CustomUser.objects.all()
+    serializer_class = CustomUserSerializer
     permission_classes = (permissions.AllowAny,)
 
     def create(self, request, *args, **kwargs):
