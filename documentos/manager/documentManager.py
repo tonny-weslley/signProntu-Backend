@@ -125,7 +125,7 @@ class PDFSigner:
     def createAndSign(self):
         self.generate_pdf()
         asPdf, _hash = self.sign()
-        Documento.objects.create(nome=self.pdf_data.nome, corpo=self.pdf_data.corpo, hash=_hash, usuario=self.username)
+        Documento.objects.create(nome=self.pdf_data["nome"], corpo=self.pdf_data["corpo"], hash=_hash, usuario=self.username)
         return asPdf
         
         
