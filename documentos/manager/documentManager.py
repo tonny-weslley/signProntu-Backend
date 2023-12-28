@@ -94,7 +94,7 @@ class PDFSigner:
         pdf_signer.sign_pdf(
             w,
             output=out,
-            appearance_text_params={"url": f"http://localhost:8000/documentos/verify_hash/?hash={_hash}"},
+            appearance_text_params={"url": f"http://localhost:8000/documentos/verify_hash/{_hash}"},
         )
 
         return out.read(), _hash
