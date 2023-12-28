@@ -6,10 +6,10 @@ from rest_framework_simplejwt.authentication import JWTAuthentication
 from rest_framework.exceptions import AuthenticationFailed
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.decorators import action
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 from base.models import CustomUser as User
 from .models import Documento
-import json
+
 
 from .manager.documentManager import PDFSigner
 
@@ -46,9 +46,9 @@ class DocumentoViewSet(viewsets.GenericViewSet):
         user = get_user_from_token(request)
         if not user:
             return Response(status=401)
-        documents = json.dumps(Documento.objects.filter(usuario=user))
+        documents = Documento.objects.filter(usuario=user)
         serializer = DocumentoSerializer(documents, many=True)
-        response = HttpResponse(serializer.data, content_type='application/json')
+        response = JsonResponse(serializer.data, content_type='application/json')
         return response
 
         
