@@ -48,7 +48,7 @@ class DocumentoViewSet(viewsets.GenericViewSet):
             return Response(status=401)
         documents = Documento.objects.filter(usuario=user)
         serializer = DocumentoSerializer(documents, many=True)
-        response = JsonResponse(serializer.data, content_type='application/json')
+        response = JsonResponse(serializer.data, safe=False)
         return response
 
         
