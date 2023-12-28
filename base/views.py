@@ -7,24 +7,6 @@ from rest_framework.response import Response
 from .models import CustomUser
 from .serializers import CustomUserSerializer
 
-
-# class CustomTokenObtainPairView(TokenObtainPairView):
-#     def post(self, request, *args, **kwargs):
-#         response = super().post(request, *args, **kwargs)
-#         refresh = response.data.get('refresh')
-#         access = response.data.get('access')
-#         user_id = self.request.user.id
-
-#         if refresh and access:
-#             # Revoke all refresh tokens for the user
-#             OutstandingToken.objects.filter(user=self.request.user, token=refresh).delete()
-
-#             # Generate a new refresh token
-#             new_refresh_token = RefreshToken.for_user(self.request.user)
-#             response.data['refresh'] = str(new_refresh_token)
-#             response.data['user_id'] = user_id
-
-#         return response
     
 class CustomTokenRefreshView(TokenRefreshView):
     def post(self, request, *args, **kwargs):
