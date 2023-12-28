@@ -30,6 +30,7 @@ class PDFSigner:
         html = template.render({'nome' : self.pdf_data['nome'], 'corpo' : self.pdf_data['corpo']})
         pdf = pdfkit.from_string(html, False, options={"enable-local-file-access": ""})
         self.pdf = pdf
+        return pdf
 
     def _create_key_pair(self):
         pkey = OpenSSL.crypto.PKey()
@@ -93,7 +94,7 @@ class PDFSigner:
         pdf_signer.sign_pdf(
             w,
             output=out,
-            appearance_text_params={"url": f"http://localhost:8000/api/v1/pdf/get_by_hash/?hash={_hash}"},
+            appearance_text_params={"url": f"http://localhost:8000/documentos/verify_hash/?hash={_hash}"},
         )
 
         return out.read(), _hash
