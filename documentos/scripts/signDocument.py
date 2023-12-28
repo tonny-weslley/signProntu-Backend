@@ -10,8 +10,9 @@ certificates = os.path.join(BASE_DIR, 'assets', 'certificates')
 
 def sign_document(document_id):
     document = Documento.objects.get(id=document_id)
-    sign_pdf(
+    alguima_coisa = sign_pdf(
         document, cert_path, key_path,
         output_path='signed.pdf',
         appearance_text='Signed by PyHanko!'
     )
+    print(alguima_coisa)
