@@ -19,6 +19,7 @@ class PDFSigner:
     def __init__(self, pdf_data, user):
         self.pdf_data = pdf_data
         self.pdf = None
+        self.user = user
         self.username = user.username
         self.cert_pem_path = f"./secrets/{self.username}_certificate.cer"
         self.key_pem_path = f"./secrets/{self.username}_private_key.pem"
@@ -125,7 +126,7 @@ class PDFSigner:
     def createAndSign(self):
         self.generate_pdf()
         asPdf, _hash = self.sign()
-        Documento.objects.create(nome=self.pdf_data["nome"], corpo=self.pdf_data["corpo"], hash=_hash, usuario=self.username)
+        Documento.objects.create(nome=self.pdf_data["nome"], corpo=self.pdf_data["corpo"], hash=_hash, usuario=self.user)
         return asPdf
         
         
