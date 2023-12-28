@@ -1,5 +1,4 @@
-from OpenSSL import crypto
-from datetime import datetime, timedelta
+from OpenSSL import crypto 
 from django.core.management.base import BaseCommand
 
 

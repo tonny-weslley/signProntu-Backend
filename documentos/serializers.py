@@ -4,7 +4,7 @@ from .models import Documento
 class DocumentoSerializer(serializers.ModelSerializer):
     class Meta:
         model = Documento
-        fields = ('id', 'nome', 'corpo', 'usuario', 'assinado')
+        fields = ('id', 'nome', 'corpo', 'usuario')
         extra_kwargs = {'usuario': {'read_only': True}}
 
 class signSerializer(serializers.Serializer):

@@ -10,7 +10,7 @@ from rest_framework.exceptions import AuthenticationFailed
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.decorators import action
 from django.http import FileResponse, HttpResponse
-import PyPDF2
+from base.models import CustomUser as User
 
 
 def get_user_from_token(request):
@@ -18,7 +18,9 @@ def get_user_from_token(request):
         auth = JWTAuthentication()
         user, _ = auth.authenticate(request)
         if user and user.is_authenticated:
-            return user
+            # pega o usuario do banco de dados
+            db_user = User.objects.get(id=user.id)
+            return db_user
     except AuthenticationFailed:
         pass
     return None
@@ -29,20 +31,24 @@ class DocumentoViewSet(viewsets.ModelViewSet):
     queryset = Documento.objects.all()
     serializer_class = DocumentoSerializer
     
-    # adiciona o usuario logado ao documento
-    def perform_create(self, serializer):
+    def createAndSign(self, request, *args, **kwargs):
+        data = request.data
+        user = get_user_from_token(self.request)
+        serializer = self.get_serializer(data=data)
+        serializer.is_valid(raise_exception=True)
         serializer.save(usuario=get_user_from_token(self.request))
+        pdf = generate_pdf(serializer.data['id'])
+        signed_pdf = sign_document(pdf)
+        print(signed_pdf)
+        
     
 
 class documentSignViewSet(viewsets.ModelViewSet):
     permission_classes = [IsAuthenticated]
     queryset = Documento.objects.all()
     serializer_class = signSerializer
+    
 
-    def perform_create(self, serializer):
-        serializer.save()
-        sign_document(serializer.data['id'])
-        
 class GeneratePdfViewSet(viewsets.ViewSet):
     permission_classes = [IsAuthenticated]
     queryset = Documento.objects.all()
