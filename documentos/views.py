@@ -9,6 +9,7 @@ from rest_framework.decorators import action
 from django.http import HttpResponse
 from base.models import CustomUser as User
 from .models import Documento
+import json
 
 from .manager.documentManager import PDFSigner
 
@@ -45,7 +46,7 @@ class DocumentoViewSet(viewsets.GenericViewSet):
         user = get_user_from_token(request)
         if not user:
             return Response(status=401)
-        documents = Documento.objects.filter(usuario=user)
+        documents = json.dumps(Documento.objects.filter(usuario=user))
         serializer = DocumentoSerializer(documents, many=True)
         response = HttpResponse(serializer.data, content_type='application/json')
         return response
