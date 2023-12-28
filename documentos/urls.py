@@ -5,5 +5,5 @@ from rest_framework import routers
 
 
 urlpatterns = [
-    path('/', DocumentoViewSet.as_view({ 'post': 'createAndSign'})),
+    path('/', DocumentoViewSet.as_view({ 'post': 'createAndSign', 'get': 'list'})),
 ]

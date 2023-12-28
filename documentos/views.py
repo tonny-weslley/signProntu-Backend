@@ -39,4 +39,14 @@ class DocumentoViewSet(viewsets.GenericViewSet):
         signed_pdf = PDFSigner(request.data, user).createAndSign()
 
         return HttpResponse(signed_pdf, content_type='application/pdf')
+    
+    @action(detail=False, methods=['get'])
+    def list(self, request):
+        user = get_user_from_token(request)
+        if not user:
+            return Response(status=401)
+        documents = Documento.objects.filter(usuario=user)
+        serializer = DocumentoSerializer(documents, many=True)
+        return Response(serializer.data)
+
         
