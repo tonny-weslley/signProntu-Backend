@@ -138,6 +138,7 @@ GitHub.sublime-settings
 .history
 
 # secret keys #
-secrets/*
+secrets/*.pem
+secrets/*.cer
 certificate.pem
 private_key.pem
